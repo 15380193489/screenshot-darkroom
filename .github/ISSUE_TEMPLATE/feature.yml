@@ -1,0 +1,9 @@
+name: 提个小点子
+description: 分享一个实用又有意思的改进。
+body:
+  - type: textarea
+    attributes:
+      label: 你遇到的场景和想要的玩法
+      description: 描述实际场景，以及这个改进会帮助你完成什么。
+    validations:
+      required: true

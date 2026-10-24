@@ -1,0 +1,19 @@
+{
+  "name": "screenshot-darkroom",
+  "version": "0.2.1",
+  "private": true,
+  "type": "module",
+  "description": "截图冲洗室 — 离线截图整理托盘工具",
+  "scripts": {
+    "build": "tauri build --ci",
+    "build:portable": "tauri build --no-bundle --ci",
+    "dev": "tauri dev",
+    "test": "node --test scripts/core.test.mjs",
+    "test:native": "cargo test --manifest-path src-tauri/Cargo.toml --locked",
+    "test:integration": "pwsh -NoProfile -File scripts/verify-auto-clothesline.ps1",
+    "package:release": "pwsh -NoProfile -File scripts/package-release.ps1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.11.4"
+  }
+}

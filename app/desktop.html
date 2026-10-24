@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>桌面晾片绳 · Darkroom</title>
+    <link rel="stylesheet" href="desktop.css" />
+  </head>
+  <body>
+    <main class="desktop-room" aria-label="桌面晾片绳">
+      <header id="move-handle" title="拖动这里，挪一挪晾片绳">
+        <span class="room-mark">✳</span>
+        <span class="room-name">我的桌面晾片绳 <small id="count">等一张新照片</small></span>
+        <span class="move-hint">⠿ 拖动摆放</span>
+        <button id="pause-capture" title="暂停自动接收" aria-label="暂停自动接收" aria-pressed="false">Ⅱ</button>
+        <button id="open-room" title="打开截图冲洗室" aria-label="打开截图冲洗室">↗</button>
+        <button id="hide-line" title="收起到冲洗室" aria-label="收起桌面晾片绳">×</button>
+      </header>
+      <div id="desktop-photos" class="desktop-photos" aria-label="最近的截图"></div>
+      <p id="widget-status" role="status">把有用的瞬间，晾在眼前。</p>
+    </main>
+    <script type="module" src="desktop.js"></script>
+  </body>
+</html>

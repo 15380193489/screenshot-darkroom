@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "截图冲洗室",
+  "version": "0.2.1",
+  "identifier": "com.darkroom.screenshot.desktop",
+  "build": { "frontendDist": "../app" },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "截图冲洗室 · Darkroom",
+        "width": 1160,
+        "height": 820,
+        "minWidth": 900,
+        "minHeight": 660,
+        "center": true,
+        "visible": false,
+        "decorations": false,
+        "dragDropEnabled": false,
+        "backgroundColor": "#f6f3eb"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src ipc: http://ipc.localhost; object-src 'none'; frame-src 'none'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "publisher": "15380193489",
+    "homepage": "https://github.com/15380193489/screenshot-darkroom",
+    "category": "Productivity",
+    "shortDescription": "把截图挂到桌面，把灵感留在本机。",
+    "licenseFile": "../LICENSE",
+    "resources": {"../THIRD-PARTY-LICENSES.txt":"THIRD-PARTY-LICENSES.txt"},
+    "icon": ["icons/icon.png", "icons/icon.ico"],
+    "windows": {
+      "allowDowngrades": false,
+      "webviewInstallMode": {"type":"downloadBootstrapper","silent":true},
+      "nsis": {"languages":["SimpChinese","English"],"installMode":"currentUser","displayLanguageSelector":false}
+    }
+  }
+}

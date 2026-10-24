@@ -1,0 +1,14 @@
+node_modules/
+src-tauri/target/
+src-tauri/gen/
+.qa/
+dist/
+release/
+WebView2/
+*.exe
+*.msi
+*.zip
+*.tmp
+.env
+.env.*
+!.env.example

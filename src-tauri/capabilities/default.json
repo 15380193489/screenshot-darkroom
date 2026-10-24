@@ -1,0 +1,5 @@
+{
+  "identifier": "main-capability",
+  "windows": ["main", "desktop-line"],
+  "permissions": ["core:default", "core:window:allow-start-dragging"]
+}

@@ -1,0 +1,83 @@
+name: Windows build and release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: windows-rust-${{ runner.arch }}-${{ hashFiles('src-tauri/Cargo.lock') }}
+          restore-keys: windows-rust-${{ runner.arch }}-
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          rustup update stable --no-self-update
+          rustup default stable
+          npm ci --no-audit --no-fund
+      - name: Check and test
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          node scripts/check-commit-privacy.mjs --all
+          node --check app/app.js
+          node --check app/desktop.js
+          npm test
+          cargo fmt --manifest-path src-tauri/Cargo.toml --check
+          cargo test --release --manifest-path src-tauri/Cargo.toml --locked
+      - name: Build Windows installer
+        run: npm run build
+      - name: Package downloads and checksums
+        run: npm run package:release
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: Darkroom-Windows-x64
+          path: dist/*
+          if-no-files-found: error
+      - name: Publish a new version
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $tag = "v$version"
+          gh release view $tag --json tagName 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Release $tag already exists; published assets remain unchanged."
+            exit 0
+          }
+          $assets = Get-ChildItem dist -File | ForEach-Object { $_.FullName }
+          gh release create $tag @assets --target $env:GITHUB_SHA --title "截图冲洗室 Darkroom $tag" --notes-file CHANGELOG.md
+          if ($LASTEXITCODE -ne 0) { throw 'GitHub release creation failed.' }

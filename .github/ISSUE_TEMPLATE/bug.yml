@@ -1,0 +1,19 @@
+name: 报告问题
+description: 帮助改进截图接收、晾片绳或离线识别。
+body:
+  - type: input
+    attributes:
+      label: 软件版本与 Windows 版本
+      placeholder: Darkroom 0.2.0 / Windows 11
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 复现步骤、预期结果与实际结果
+      description: 截图请先遮挡隐私内容，不要上传 collection.json 或个人备份。
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: 安装方式
+      options: [安装版, 免安装版, 自行构建]
